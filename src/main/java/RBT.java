@@ -1,7 +1,11 @@
-public class RBT implements Tree<Employee>{
+public class RBT implements Tree{
 
-    private TreeNode<Employee> root;
+    private TreeNode root;
     private int size;
+
+    public RBT(){
+
+    }
 
     /**
      * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a

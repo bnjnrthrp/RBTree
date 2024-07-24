@@ -10,7 +10,7 @@
  * @author Gabbie Williams
  */
 
-public interface TreeNode<Employee> {
+public interface TreeNode {
     /**
      * Creates a new node holding the employee and then adds it to the tree. Recursively proceeds down
      * the left or right side depending on the employee id comparison until it reaches a null child.
@@ -28,7 +28,7 @@ public interface TreeNode<Employee> {
      *
      * @param node the node containing an employee to add
      */
-    void add(TreeNode<Employee> node);
+    void add(TreeNode node);
 
     /**
      * Searches for an employee by their id number. Returns null if id not found. Recursively searches

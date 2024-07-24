@@ -1,10 +1,13 @@
-public class Node implements TreeNode<Employee>{
+public class Node implements TreeNode{
 
     private int id;
     private Employee employee;
-    private TreeNode<Employee> left;
-    private TreeNode<Employee> right;
+    private TreeNode left;
+    private TreeNode right;
 
+    public Node(Employee newEmployee){
+
+    }
 
     /**
      * Creates a new node holding the employee and then adds it to the tree. Recursively proceeds down
@@ -27,8 +30,7 @@ public class Node implements TreeNode<Employee>{
      * @param node the node containing an employee to add
      */
     @Override
-    public void add(TreeNode<Employee> node) {
-
+    public void add(TreeNode node) {
     }
 
     /**

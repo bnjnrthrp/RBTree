@@ -1,4 +1,4 @@
-public class BST implements Tree<Employee> {
+public class BST implements Tree{
     /**
      * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a
      * Node with will contain the employee. Then adds the Node to the tree and puts it in its proper

@@ -10,7 +10,7 @@
  * @author Gabbie Williams
  */
 
-public interface Tree<Employee> {
+public interface Tree {
 
     /**
      * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a
