@@ -19,6 +19,19 @@ public class Node implements TreeNode<Employee>{
     }
 
     /**
+     * Takes a given node containing an employee and inserts it into the tree structure.
+     * Uses the employee id as the key to compare nodes and determine if we travel left or right
+     * down the tree. Will insert the node at the first null location found. If a duplicate is found,
+     * log the duplicate id in the console and return early.
+     *
+     * @param node the node containing an employee to add
+     */
+    @Override
+    public void add(TreeNode<Employee> node) {
+
+    }
+
+    /**
      * Searches for an employee by their id number. Returns null if id not found. Recursively searches
      * each node, then depending on the comparison between the id and the node's id, continues to the left
      * or right child. If it reaches null without finding, then the id is not in the tree.
