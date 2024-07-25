@@ -78,10 +78,12 @@ public class BST implements Tree {
     @Override
     public Employee find(int id) {
         Node currNode = this.root;
+        // Traverse the tree, go left if id is less than the node, go right if greater than the current node
+        // Return if matched
         while (currNode != null) {
-            if (id == currNode.id){
+            if (id == currNode.id) {
                 return currNode.employee;
-            } else if (id < currNode.id){
+            } else if (id < currNode.id) {
                 currNode = currNode.left;
             } else {
                 currNode = currNode.right;
@@ -95,11 +97,94 @@ public class BST implements Tree {
      * returns null.
      *
      * @param id the id number of the employee to remove
-     * @return the employee removed from the tree
+     * @return the employee removed from the tree, null if not found
      */
     @Override
     public Employee remove(int id) {
-        return null;
+        // Track the parent and current node
+        Node parent = null;
+        Node currNode = this.root;
+
+        // Traverse the tree to the left or right, depending on the id, until we get a match
+        while (currNode != null && currNode.id != id) {
+            parent = currNode;
+            if (id < currNode.id) {
+                currNode = currNode.left;
+            } else {
+                currNode = currNode.right;
+            }
+        }
+        // If not found, return null
+        if (currNode == null) {
+            return null;
+        }
+
+        // Determine how many children the matched node has and rearrange the subtree from that node due to that.
+        // There are 3 cases: no children, 1 child, or 2 children
+
+        // Case 1: No children
+        if (currNode.left == null && currNode.right == null) {
+            // If it was the root node and no children, make the root null and return
+            if (currNode == this.root) {
+                this.root = null;
+            }
+            // Otherwise, change the parent's left or right child to null, depending on the id
+            else if (id < parent.id) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+            decrementSize();
+            return currNode.employee;
+        }
+
+        // Case 2: 1 Child
+        if (currNode.left == null || currNode.right == null) {
+            // Set child to the non-null child of currNode
+            Node child = currNode.left != null ? currNode.left : currNode.right;
+
+            // If removing the root, then make the root the remaining child
+            if (currNode == this.root) {
+                this.root = child;
+            } else if (id < parent.id) {
+                parent.left = child;
+            } else {
+                parent.right = child;
+            }
+
+            decrementSize();
+            return currNode.employee;
+        }
+
+        // Case 3: 2 children
+        Node inOrderSuccessor = currNode.right;
+        Node inOrderSuccessorParent = currNode;
+        while (inOrderSuccessor != null){
+            // Go as far down the left side of the right subtree
+            inOrderSuccessorParent = inOrderSuccessor;
+            inOrderSuccessor = inOrderSuccessor.left;
+        }
+
+        // Copy the data from the successor to the current node
+        Employee deleted = currNode.employee;
+        currNode.employee = inOrderSuccessor.employee;
+
+        // Delete the successor node
+        // Case 1: successor is the right child
+        if (inOrderSuccessor == currNode.right){
+            // Make the successor's right child the new right child
+            currNode.right = inOrderSuccessor.right;
+        }
+
+        // Case 2: Successor is some left child all the way down
+        // This could have either another node on the right side, which becomes the parent's new left child
+        // Or it is null, and that parent's left child is now null
+        else {
+            inOrderSuccessorParent.left = inOrderSuccessor.right;
+        }
+
+        decrementSize();
+        return deleted; // Return the deleted employee
     }
 
     private void incrementSize() {
