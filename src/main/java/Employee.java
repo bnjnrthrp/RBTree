@@ -6,17 +6,26 @@
  */
 
 public class Employee {
-    private static int id;
+    private static int idCounter;
+    private int id;
     private String first;
     private String last;
     private boolean fullTime;
 
     public Employee(String first, String last, boolean fullTime){
-        return;
+        this.first = first;
+        this.last = last;
+        this.id = idCounter;
+        incrementId();
+        this.fullTime = true;
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     private static void incrementId(){
-        id++;
+        idCounter++;
     }
 }
 
