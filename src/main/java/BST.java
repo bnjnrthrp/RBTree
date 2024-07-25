@@ -77,6 +77,16 @@ public class BST implements Tree {
      */
     @Override
     public Employee find(int id) {
+        Node currNode = this.root;
+        while (currNode != null) {
+            if (id == currNode.id){
+                return currNode.employee;
+            } else if (id < currNode.id){
+                currNode = currNode.left;
+            } else {
+                currNode = currNode.right;
+            }
+        }
         return null;
     }
 
