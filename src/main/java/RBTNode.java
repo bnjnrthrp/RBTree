@@ -21,10 +21,10 @@ public class RBTNode extends Node implements TreeNode{
     /**
      * Constructor for a RBT Node. Sets the color attribute as required when inserting a node
      * into the tree
-     * @param employee
+     * @param student
      */
-    public RBTNode(Employee employee){
-        super(employee);
+    public RBTNode(Student student){
+        super(student);
     }
 
 }

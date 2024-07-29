@@ -10,23 +10,23 @@
  * @author Gabbie Williams
  */
 
-public interface Tree {
+public interface Tree<T> {
 
     /**
      * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a
      * Node with will contain the employee. Then adds the Node to the tree and puts it in its proper
      * place.
      *
-     * @param employee the employee to add to the tree.
+     * @param data the employee to add to the tree.
      */
-    void add(Employee employee);
+    void add(T data);
 
     /**
      * Searches for an employee by their id number. Returns null if id not found
      * @param id the employee id number
      * @return the Employee if found. Null if not found.
      */
-    Employee find(int id);
+    T find(int id);
 
     /**
      * Removes an employee based off id from the tree hierarchy and returns it. If the id is not found,
@@ -35,5 +35,5 @@ public interface Tree {
      * @param id the id number of the employee to remove
      * @return the employee removed from the tree
      */
-    Employee remove(int id);
+    T remove(int id);
 }

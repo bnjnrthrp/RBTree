@@ -1,6 +1,6 @@
-public class RBT implements Tree{
+public class RBT<T> implements Tree<T>{
 
-    private TreeNode root;
+    private RBTNode root;
     private int size;
 
     public RBT(){
@@ -12,21 +12,21 @@ public class RBT implements Tree{
      * Node with will contain the employee. Then adds the Node to the tree and puts it in its proper
      * place.
      *
-     * @param employee the employee to add to the tree.
+     * @param data the data to add to the tree.
      */
     @Override
-    public void add(Employee employee) {
+    public void add(T data) {
 
     }
 
     /**
-     * Searches for an employee by their id number. Returns null if id not found
+     * Searches for a piece
      *
-     * @param id the employee id number
-     * @return the Employee if found. Null if not found.
+     * @param id the unique key associated with a piece of data
+     * @return the data, if found. Otherwise null.
      */
     @Override
-    public Employee find(int id) {
+    public T find(int id) {
         return null;
     }
 
@@ -34,11 +34,11 @@ public class RBT implements Tree{
      * Removes an employee based off id from the tree hierarchy and returns it. If the id is not found,
      * returns null.
      *
-     * @param id the id number of the employee to remove
-     * @return the employee removed from the tree
+     * @param id the id number of the data to remove
+     * @return the data removed from the tree
      */
     @Override
-    public Employee remove(int id) {
+    public T remove(int id) {
         return null;
     }
 }
