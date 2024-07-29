@@ -5,19 +5,19 @@
  * whether they are full time.
  */
 
-public class Employee {
+public class Student implements Comparable<Student> {
     private static int idCounter;
     private int id;
     private String first;
     private String last;
-    private boolean fullTime;
+    private RBT<Book> books;
 
-    public Employee(String first, String last, boolean fullTime){
+    public Student(String first, String last, boolean fullTime){
         this.first = first;
         this.last = last;
         this.id = idCounter;
         incrementId();
-        this.fullTime = true;
+        this.books = new RBT();
     }
 
     public int getId(){
@@ -26,6 +26,20 @@ public class Employee {
 
     private static void incrementId(){
         idCounter++;
+    }
+
+    public void addBook(Book book){
+        books.add(book);
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(Student o) {
+        return this.id - o.id;
     }
 }
 

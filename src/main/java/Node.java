@@ -1,18 +1,18 @@
 public class Node implements TreeNode {
 
     int id;
-    Employee employee;
+    Student student;
     Node left;
     Node right;
 
-    public Node(Employee newEmployee) {
-        this.id = newEmployee.getId();
-        this.employee = newEmployee;
+    public Node(Student newStudent) {
+        this.id = newStudent.getId();
+        this.student = newStudent;
         this.left = null;
         this.right = null;
     }
 
-    public Employee getEmployee() {
-        return this.employee;
+    public Student getEmployee() {
+        return this.student;
     }
 }
