@@ -1,6 +1,5 @@
 public class Node implements TreeNode {
 
-    int id;
     Indexable data;
     Node parent;
     Node left;
@@ -62,5 +61,9 @@ public class Node implements TreeNode {
 
     public void setColorRed(){
         this.isBlack = false;
+    }
+    @Override
+    public String toString(){
+        return "id: " + this.data.id + " " + "[" + (this.isBlack() ? "B" : "R") + "] ";
     }
 }
