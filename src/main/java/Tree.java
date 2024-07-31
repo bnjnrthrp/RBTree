@@ -10,7 +10,7 @@
  * @author Gabbie Williams
  */
 
-public interface Tree<T> {
+public interface Tree {
 
     /**
      * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a
@@ -19,14 +19,14 @@ public interface Tree<T> {
      *
      * @param data the employee to add to the tree.
      */
-    void add(T data);
+    void add(Indexable data);
 
     /**
      * Searches for an employee by their id number. Returns null if id not found
      * @param id the employee id number
      * @return the Employee if found. Null if not found.
      */
-    T find(int id);
+    Indexable find(int id);
 
     /**
      * Removes an employee based off id from the tree hierarchy and returns it. If the id is not found,
@@ -35,5 +35,5 @@ public interface Tree<T> {
      * @param id the id number of the employee to remove
      * @return the employee removed from the tree
      */
-    T remove(int id);
+    Indexable remove(int id);
 }
