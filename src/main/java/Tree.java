@@ -36,4 +36,14 @@ public interface Tree {
      * @return the employee removed from the tree
      */
     Indexable remove(int id);
+
+    /**
+     * Does an in-order traversal to print a RB Tree
+     */
+    void printInOrder();
+
+    /**
+     * Prints the tree using a breadth first traversal
+     */
+    void printBFS();
 }

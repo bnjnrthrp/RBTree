@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class RBT implements Tree{
 
     private Node root;
@@ -48,14 +51,16 @@ public class RBT implements Tree{
         if (parent == null){
             this.root = newNode;
             newNode.setColorBlack(); // Root is always black
-        } else if (newNode.data.id < currNode.data.id) {
-            currNode.left = newNode;
+        } else if (newNode.data.id < parent.data.id) {
+            parent.left = newNode;
         } else {
-            currNode.right = newNode;
+            parent.right = newNode;
         }
+        // Set the parent of the now-inserted node.
+        newNode.parent = parent;
 
         // Rebalance the tree after inserting a node
-        fixAfterInsert(newNode);
+//        fixAfterInsert(newNode);
     }
 
     private void fixAfterInsert(Node node){
@@ -106,18 +111,37 @@ public class RBT implements Tree{
         Node rightChild = node.right;
 
         node.right = rightChild.left;
+        // if node.right.left is null, nothing will change, but if
+        // there is a node, then update its parent to the current node.
         if (rightChild.left != null){
             rightChild.left.parent = node;
         }
 
+        // Swap the positions of the node and child so that the child becomes the parent of node.
         rightChild.left = node;
         node.parent = rightChild;
 
+        // reset the original parent's child so that it is now the right child
         resetParent(parent, node, rightChild);
     }
 
     private void rotateRight(Node node){
+        Node parent = node.parent;
+        Node leftChild = node.left;
 
+        node.left = leftChild.right;
+        // if node.left.right is null, nothing will change, but if
+        // there is a node, then update its parent to the current node.
+        if (leftChild.right != null){
+            leftChild.right.parent = node;
+        }
+
+        // Swap the positions of the node and child so that the child becomes the parent of node.
+        leftChild.right = node;
+        node.parent = leftChild;
+
+        // reset the original parent's child so that it is now the left child
+        resetParent(parent, node, leftChild);
     }
 
     private void resetParent(Node parent, Node oldChild, Node newChild){
@@ -149,9 +173,9 @@ public class RBT implements Tree{
 
         // Iterate while the current node isn't null
         while (currNode != null){
-            if (id == currNode.id){
+            if (id == currNode.data.id){
                 return currNode.data;
-            } else if (id < currNode.id){
+            } else if (id < currNode.data.id){
                 currNode = currNode.left;
             } else {
                 currNode = currNode.right;
@@ -159,6 +183,10 @@ public class RBT implements Tree{
         }
         // If we get to null, it doesn't exist
         return null;
+    }
+
+    public Indexable find(Indexable data){
+        return find(data.id);
     }
 
     /**
@@ -171,5 +199,47 @@ public class RBT implements Tree{
     @Override
     public Indexable remove(int id) {
         return null;
+    }
+
+    /**
+     * Does an in-order traversal to print a RB Tree
+     */
+    @Override
+    public void printInOrder() {
+        printInOrder(this.root);
+    }
+
+    private void printInOrder(Node node){
+        if (node != null){
+            printInOrder(node.left);
+            // Example output: id: 14 [B]
+            System.out.print(node);
+            printInOrder(node.right);
+        }
+    }
+
+    /**
+     * Prints the tree using a breadth first traversal
+     */
+    @Override
+    public void printBFS() {
+        if (this.root == null){
+            return;
+        }
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(this.root);
+
+        while (!queue.isEmpty()){
+            Node curr = queue.poll();
+            System.out.println(curr);
+
+            if (curr.left != null){
+                queue.add(curr.left);
+            }
+            if (curr.right != null){
+                queue.add(curr.right);
+            }
+        }
     }
 }
