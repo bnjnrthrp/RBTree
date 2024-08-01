@@ -1,7 +1,3 @@
-public abstract class Indexable {
-    protected int id;
-
-    public int getId(){
-        return this.id;
-    }
+public interface Indexable {
+        public int getId();
 }

@@ -34,9 +34,9 @@ public class RBT implements Tree{
 
         while (currNode != null){
             parent = currNode;
-            if (data.id == currNode.data.id){
+            if (data.getId() == currNode.data.getId()){
                 System.out.println("This data is already in the tree");
-            } else if (data.id < currNode.data.id){
+            } else if (data.getId() < currNode.data.getId()){
                 currNode = currNode.left;
             } else {
                 currNode = currNode.right;
@@ -51,7 +51,7 @@ public class RBT implements Tree{
         if (parent == null){
             this.root = newNode;
             newNode.setColorBlack(); // Root is always black
-        } else if (newNode.data.id < parent.data.id) {
+        } else if (newNode.data.getId() < parent.data.getId()) {
             parent.left = newNode;
         } else {
             parent.right = newNode;
@@ -173,9 +173,9 @@ public class RBT implements Tree{
 
         // Iterate while the current node isn't null
         while (currNode != null){
-            if (id == currNode.data.id){
+            if (id == currNode.data.getId()){
                 return currNode.data;
-            } else if (id < currNode.data.id){
+            } else if (id < currNode.data.getId()){
                 currNode = currNode.left;
             } else {
                 currNode = currNode.right;
@@ -186,7 +186,7 @@ public class RBT implements Tree{
     }
 
     public Indexable find(Indexable data){
-        return find(data.id);
+        return find(data.getId());
     }
 
     /**

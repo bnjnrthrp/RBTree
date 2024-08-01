@@ -22,7 +22,7 @@ public class RBTTest {
     @Test
     public void getRoot() {
         rbt.add(s1);
-        assertEquals(0, rbt.getRoot().data.id);
+        assertEquals(0, rbt.getRoot().data.getId());
         assertEquals(true, rbt.getRoot().isBlack());
         rbt.printBFS();
         rbt.printInOrder();
@@ -37,9 +37,9 @@ public class RBTTest {
         rbt.printBFS();
 //        rbt.printInOrder();
 
-        assertEquals(1, rbt.getRoot().data.id);
-        assertEquals(0, rbt.getRoot().left.data.id);
-        assertEquals(2, rbt.getRoot().right.data.id);
+        assertEquals(1, rbt.getRoot().data.getId());
+        assertEquals(0, rbt.getRoot().left.data.getId());
+        assertEquals(2, rbt.getRoot().right.data.getId());
 
     }
 

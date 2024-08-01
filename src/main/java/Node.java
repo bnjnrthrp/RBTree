@@ -64,6 +64,6 @@ public class Node implements TreeNode {
     }
     @Override
     public String toString(){
-        return "id: " + this.data.id + " " + "[" + (this.isBlack() ? "B" : "R") + "] ";
+        return "id: " + this.data.getId() + " " + "[" + (this.isBlack() ? "B" : "R") + "] ";
     }
 }
