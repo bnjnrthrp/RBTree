@@ -5,12 +5,12 @@
  * whether they are full time.
  */
 
-public class Student implements Comparable<Student> {
+public class Student extends Indexable implements Comparable<Student> {
     private static int idCounter;
-    private int id;
+//    private int id;
     private String first;
     private String last;
-    private RBT<Book> books;
+    private RBT books;
 
     public Student(String first, String last, boolean fullTime){
         this.first = first;
@@ -18,10 +18,6 @@ public class Student implements Comparable<Student> {
         this.id = idCounter;
         incrementId();
         this.books = new RBT();
-    }
-
-    public int getId(){
-        return this.id;
     }
 
     private static void incrementId(){

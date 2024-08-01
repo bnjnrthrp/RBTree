@@ -1,3 +1,5 @@
-public class Book {
+public class Book extends Indexable {
+
+
     private int ISBN;
 }
