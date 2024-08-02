@@ -55,6 +55,56 @@ public class RBTTest {
         assertNull(rbt.find(s4.getId()));
     }
 
+
+    /**
+     * s1(B)                            s2(B)
+     *   \               rotation     /       \
+     *     s2(R)            --->    s1(R)     s3(R)
+     *        \
+     *         s3(R)
+     *
+     *
+     */
+    @Test
+    public void rotateLeft(){
+        // Forces a rotation by adding to the right each time. End up with s2 as root, s1 and left child
+        // (red) and s3 as right child(red)
+        rbt.add(s1);
+        rbt.add(s2);
+        rbt.add(s3);
+
+        assertEquals(s2, rbt.getRoot().data);
+        assertTrue(rbt.getNode(s2).isBlack());
+        assertEquals(s1, rbt.getRoot().left.data);
+        assertFalse(rbt.getNode(s1).isBlack());
+        assertEquals(s3, rbt.getRoot().right.data);
+        assertFalse(rbt.getNode(s1).isBlack());
+    }
+
+    /**
+     *          s3(B)                   s2(B)
+     *         /         rotation     /       \
+     *     s2(R)            --->    s1(R)     s3(R)
+     *    /
+     * s1(R)
+     *
+     *
+     */
+    @Test
+    public void rotateRight(){
+        // Forces a rotation by adding to the right each time. End up with s2 as root, s1 and left child
+        // (red) and s3 as right child(red)
+        rbt.add(s3);
+        rbt.add(s2);
+        rbt.add(s1);
+
+        assertEquals(s2, rbt.getRoot().data);
+        assertTrue(rbt.getNode(s2).isBlack());
+        assertEquals(s1, rbt.getRoot().left.data);
+        assertFalse(rbt.getNode(s1).isBlack());
+        assertEquals(s3, rbt.getRoot().right.data);
+        assertFalse(rbt.getNode(s1).isBlack());
+    }
     @Test
     public void remove() {
     }

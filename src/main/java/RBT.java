@@ -1,23 +1,25 @@
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class RBT implements Tree{
+public class RBT implements Tree {
 
     private Node root;
     private int size;
 
-    public RBT(){
+    public RBT() {
         this.root = null;
         this.size = 0;
     }
 
     /**
      * Getter for the root node of this RB Tree
+     *
      * @return A node of the type
      */
-    public Node getRoot(){
+    public Node getRoot() {
         return this.root;
     }
+
 
     /**
      * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a
@@ -28,15 +30,15 @@ public class RBT implements Tree{
      */
     @Override
     public void add(Indexable data) {
-          // Start at the root and travel left or right until reaching null
+        // Start at the root and travel left or right until reaching null
         Node currNode = this.root;
         Node parent = null;
 
-        while (currNode != null){
+        while (currNode != null) {
             parent = currNode;
-            if (data.getId() == currNode.data.getId()){
+            if (data.getId() == currNode.data.getId()) {
                 System.out.println("This data is already in the tree");
-            } else if (data.getId() < currNode.data.getId()){
+            } else if (data.getId() < currNode.data.getId()) {
                 currNode = currNode.left;
             } else {
                 currNode = currNode.right;
@@ -48,7 +50,7 @@ public class RBT implements Tree{
         Node newNode = new Node(data); // New nodes are always red
         newNode.parent = parent;
 
-        if (parent == null){
+        if (parent == null) {
             this.root = newNode;
             newNode.setColorBlack(); // Root is always black
         } else if (newNode.data.getId() < parent.data.getId()) {
@@ -60,19 +62,19 @@ public class RBT implements Tree{
         newNode.parent = parent;
 
         // Rebalance the tree after inserting a node
-//        fixAfterInsert(newNode);
+        fixAfterInsert(newNode);
     }
 
-    private void fixAfterInsert(Node node){
+    private void fixAfterInsert(Node node) {
         Node parent = node.parent;
 
         // Case 1: Parent is null, because the node is the root. Early return, nothing to fix
-        if (parent == null){
+        if (parent == null) {
             return;
         }
 
         // Case 2: Parent node is black, nothing to fix, early return.
-        if (parent.isBlack()){
+        if (parent.isBlack()) {
             return;
         }
 
@@ -80,14 +82,14 @@ public class RBT implements Tree{
         Node grandparent = parent.parent;
         // Get the uncle
         Node uncle;
-        if (grandparent.left == parent){
+        if (grandparent.left == parent) {
             uncle = grandparent.right;
         } else {
             uncle = grandparent.left;
         }
 
         // Case 3: Uncle is a red, so recolor the parent, grandparent, and uncle
-        if (uncle != null && !uncle.isBlack()){
+        if (uncle != null && !uncle.isBlack()) {
             parent.setColorBlack();
             grandparent.setColorRed();
             uncle.setColorBlack();
@@ -97,23 +99,40 @@ public class RBT implements Tree{
             fixAfterInsert(grandparent);
         }
         // Case 4: Uncle is Black or Null
-        else if (parent == grandparent.left){
+        else if (parent == grandparent.left) {
             // Case 4a: Node is the right child of parent, and parent is left child of grandparent.
             // Rotate to the left
-            if (node == parent.right){
+            if (node == parent.right) {
                 rotateLeft(parent);
+                parent = node;
             }
+
+            // Case 5a: Node is the left child of parent, parent left child of grandparent
+            rotateRight(grandparent);
+
+            parent.setColorBlack();
+            grandparent.setColorRed();
+        } else {
+            // Case 4b: Opposite of 4a - node is the left child of parent, parent is right child of grandparent
+            if (node == parent.left) {
+                rotateRight(parent);
+                parent = node;
+            }
+            rotateLeft(grandparent);
+            // Reset colors
+            parent.setColorBlack();
+            grandparent.setColorRed();
         }
     }
 
-    private void rotateLeft(Node node){
+    private void rotateLeft(Node node) {
         Node parent = node.parent;
         Node rightChild = node.right;
 
         node.right = rightChild.left;
         // if node.right.left is null, nothing will change, but if
         // there is a node, then update its parent to the current node.
-        if (rightChild.left != null){
+        if (rightChild.left != null) {
             rightChild.left.parent = node;
         }
 
@@ -125,14 +144,14 @@ public class RBT implements Tree{
         resetParent(parent, node, rightChild);
     }
 
-    private void rotateRight(Node node){
+    private void rotateRight(Node node) {
         Node parent = node.parent;
         Node leftChild = node.left;
 
         node.left = leftChild.right;
         // if node.left.right is null, nothing will change, but if
         // there is a node, then update its parent to the current node.
-        if (leftChild.right != null){
+        if (leftChild.right != null) {
             leftChild.right.parent = node;
         }
 
@@ -144,18 +163,18 @@ public class RBT implements Tree{
         resetParent(parent, node, leftChild);
     }
 
-    private void resetParent(Node parent, Node oldChild, Node newChild){
+    private void resetParent(Node parent, Node oldChild, Node newChild) {
         // If the parent is null, we rotated the root. Set root to the new child
-        if (parent == null){
+        if (parent == null) {
             this.root = newChild;
-        } else if (parent.left == oldChild){
+        } else if (parent.left == oldChild) {
             parent.left = newChild;
         } else {
             parent.right = newChild;
         }
 
         // Incase we are reseting for a deleted node and new child is null
-        if (newChild != null){
+        if (newChild != null) {
             newChild.parent = parent;
         }
     }
@@ -172,10 +191,10 @@ public class RBT implements Tree{
         Node currNode = this.root;
 
         // Iterate while the current node isn't null
-        while (currNode != null){
-            if (id == currNode.data.getId()){
+        while (currNode != null) {
+            if (id == currNode.data.getId()) {
                 return currNode.data;
-            } else if (id < currNode.data.getId()){
+            } else if (id < currNode.data.getId()) {
                 currNode = currNode.left;
             } else {
                 currNode = currNode.right;
@@ -185,8 +204,38 @@ public class RBT implements Tree{
         return null;
     }
 
-    public Indexable find(Indexable data){
+    public Indexable find(Indexable data) {
         return find(data.getId());
+    }
+
+    /**
+     * Returns the node that contains the data provided
+     * @param data the data to search for
+     * @return the node that contains the data
+     */
+    public Node getNode(Indexable data){
+        // Pulls the id from the data and searches for the node
+        return getNode(data.getId());
+    }
+
+    /**
+     * Returns the node that contains the data provided
+     * @param id the id to search for
+     * @return the node that contains the data
+     */
+    public Node getNode(int id){
+        Node currNode = this.root;
+
+        while (currNode != null){
+            if (id == currNode.data.getId()){
+                return currNode;
+            } else if (id < currNode.data.getId()){
+                currNode = currNode.left;
+            } else {
+                currNode = currNode.right;
+            }
+        }
+        return null;
     }
 
     /**
@@ -209,8 +258,8 @@ public class RBT implements Tree{
         printInOrder(this.root);
     }
 
-    private void printInOrder(Node node){
-        if (node != null){
+    private void printInOrder(Node node) {
+        if (node != null) {
             printInOrder(node.left);
             // Example output: id: 14 [B]
             System.out.print(node);
@@ -223,21 +272,21 @@ public class RBT implements Tree{
      */
     @Override
     public void printBFS() {
-        if (this.root == null){
+        if (this.root == null) {
             return;
         }
 
         Queue<Node> queue = new LinkedList<>();
         queue.add(this.root);
 
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             Node curr = queue.poll();
             System.out.println(curr);
 
-            if (curr.left != null){
+            if (curr.left != null) {
                 queue.add(curr.left);
             }
-            if (curr.right != null){
+            if (curr.right != null) {
                 queue.add(curr.right);
             }
         }
