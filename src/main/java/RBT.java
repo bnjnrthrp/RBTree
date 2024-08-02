@@ -2,15 +2,20 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class RBT implements Tree {
-
+    //////////////////////
+    // ATTRIBUTES
     private Node root;
     private int size;
 
+    //////////////////////
+    // CONSTRUCTORS
     public RBT() {
         this.root = null;
         this.size = 0;
     }
 
+    //////////////////////
+    // GETTERS
     /**
      * Getter for the root node of this RB Tree
      *
@@ -20,10 +25,11 @@ public class RBT implements Tree {
         return this.root;
     }
 
-
+    //////////////////////
+    // METHODS
     /**
-     * Adds an employee to the existing tree hierarchy. Takes a pre-made employee and then creates a
-     * Node with will contain the employee. Then adds the Node to the tree and puts it in its proper
+     * Adds an object to the existing tree hierarchy. Takes a pre-made object and then creates a
+     * Node with will contain the object. Then adds the Node to the tree and puts it in its proper
      * place.
      *
      * @param data the data to add to the tree.
@@ -125,6 +131,8 @@ public class RBT implements Tree {
         }
     }
 
+    //////////////////////
+    // ROTATE
     private void rotateLeft(Node node) {
         Node parent = node.parent;
         Node rightChild = node.right;
@@ -163,24 +171,10 @@ public class RBT implements Tree {
         resetParent(parent, node, leftChild);
     }
 
-    private void resetParent(Node parent, Node oldChild, Node newChild) {
-        // If the parent is null, we rotated the root. Set root to the new child
-        if (parent == null) {
-            this.root = newChild;
-        } else if (parent.left == oldChild) {
-            parent.left = newChild;
-        } else {
-            parent.right = newChild;
-        }
-
-        // Incase we are reseting for a deleted node and new child is null
-        if (newChild != null) {
-            newChild.parent = parent;
-        }
-    }
-
+    //////////////////////
+    // FIND
     /**
-     * Searches for a piece
+     * Searches data
      *
      * @param id the unique key associated with a piece of data
      * @return the data, if found. Otherwise, null.
@@ -208,8 +202,11 @@ public class RBT implements Tree {
         return find(data.getId());
     }
 
+    //////////////////////
+    // GET
     /**
      * Returns the node that contains the data provided
+     * 
      * @param data the data to search for
      * @return the node that contains the data
      */
@@ -220,6 +217,7 @@ public class RBT implements Tree {
 
     /**
      * Returns the node that contains the data provided
+     * 
      * @param id the id to search for
      * @return the node that contains the data
      */
@@ -238,18 +236,211 @@ public class RBT implements Tree {
         return null;
     }
 
+    //////////////////////
+    // REMOVE
     /**
-     * Removes an employee based off id from the tree hierarchy and returns it. If the id is not found,
-     * returns null.
+     * Removes a node by its id from the tree
      *
-     * @param id the id number of the data to remove
-     * @return the data removed from the tree
+     * @param id the id of data to be removed
+     * @return data removed from the tree
      */
     @Override
     public Indexable remove(int id) {
-        return null;
+        Node node = getNode(id);            // find the node to remove
+        if (node == null) {                 // node doesn't exist
+            return null;                    // return null
+        }
+
+        Node toRemove = node;               // variable for node to be removed
+        Node child, parent;                 // variable for child and parent
+        boolean color;                      // variable bool for color
+
+        // Determine the node to actually remove, node or successors
+        if (node.left == null || node.right == null) {  
+            toRemove = node;                    // node has at most one child
+        } 
+        else {                                  // node has two children
+            toRemove = successor(node);         // find the successor
+        }
+
+        // the child node to replace the removed node
+        child = (toRemove.left != null) ? toRemove.left : toRemove.right;
+
+        parent = toRemove.parent;            // get parent of node to be removed
+        color = toRemove.isBlack;            // store color of node to be removed
+
+        // the parent
+        if (child != null) {                // if child isn't null
+            child.parent = parent;          // set parent of child to parent
+        }
+
+        if (parent == null) {               // if removing the root node 
+            this.root = child;                  // update the root reference
+        } else if (toRemove == parent.left) {   
+            parent.left = child;                // replace the left child reference
+        } else {
+            parent.right = child;               // replace the right child reference
+        }
+
+        if (toRemove != node) {             // if we're not removing the node itself
+            node.data = toRemove.data;          // copy the data from the successor to the node
+        }
+        
+        if (color) {                        // if the removed node was black
+            fixAfterRemove(child, parent);      // fix the tree
+        }
+
+        size--;                             // decrease tree size
+        return node.data;
     }
 
+    /**
+     * Fixes the tree after a removal
+     *
+     * @param node node replacing the removed node
+     * @param parent parent of the node
+     */
+    private void fixAfterRemove(Node node, Node parent) {
+        while (node != this.root && (node == null || node.isBlack)) {
+            if (node == parent.left) {
+                Node sibling = parent.right;        // set sibling to parent right
+
+                // CASE 1: Sibling is red
+                if (!sibling.isBlack) {
+                    sibling.setColorBlack();        // sibling color to black
+                    parent.setColorRed();           // parent color to red
+                    rotateLeft(parent);             // rotate left around parent
+                    sibling = parent.right;         // update sibling
+                }
+
+                // CASE 2: Sibling is black with two black children
+                if ((sibling.left == null || sibling.left.isBlack) && 
+                    (sibling.right == null || sibling.right.isBlack)) {
+                    sibling.setColorRed();         // sibling color to red
+                    node = parent;                  // node is now the parent
+                    parent = node.parent;           // update parent
+                } 
+
+                else {
+                    // CASE 3: Sibling is black with a red left child and black right child
+                    if (sibling.right == null || sibling.right.isBlack) {
+                        sibling.left.setColorBlack();   // set left of sibling to black
+                        sibling.setColorRed();          // set sibling to red
+                        rotateRight(sibling);           // rotate right around sibling
+                        sibling = parent.right;         // update sibling
+                    }
+
+                    // CASE 4: Sibling is black with a red right child
+                    sibling.isBlack = parent.isBlack;   // set sibling to parent color
+                    parent.setColorBlack();             // set parent to black
+                    if (sibling.right != null) {        // if sibling right exists
+                        sibling.right.setColorBlack();      // set sibling right color to black
+                    }
+
+                    rotateLeft(parent);                 // rotate left around the parent
+                    node = this.root;                   // update node to root
+                    break;                              // end loop
+                }
+            } 
+            else {
+                Node sibling = parent.left;             // sibling set to parent left
+
+                // CASE 1: Sibling is red
+                if (!sibling.isBlack) {                 
+                    sibling.setColorBlack();            // set sibling color to black
+                    parent.setColorRed();               // set parent color to red
+                    rotateRight(parent);                // rotate right around the parent
+                    sibling = parent.left;              // update sibling
+                }
+
+                // CASE 2: Sibling is black with two black children
+                if ((sibling.left == null || sibling.left.isBlack) && 
+                    (sibling.right == null || sibling.right.isBlack)) {
+                    sibling.setColorRed();              // set sibling color to red
+                    node = parent;                      // update node
+                    parent = node.parent;               // update parent
+                } 
+                else {
+                    // CASE 3: Sibling is black with a red right child and black left child
+                    if (sibling.left == null || sibling.left.isBlack) {
+                        sibling.right.setColorBlack();  // set right child of sibling to black
+                        sibling.setColorRed();          // set sibling color to red
+                        rotateLeft(sibling);            // rotate left around sibling
+                        sibling = parent.left;          // update sibling
+                    }
+
+                    // CASE 4: Sibling is black with a red left child
+                    sibling.isBlack = parent.isBlack;   // set sibling color to parent color
+                    parent.setColorBlack();             // set parent color to black
+                    if (sibling.left != null) {         // if sibling left exists
+                        sibling.left.setColorBlack();       // set sibling left color to black
+                    }
+
+                    rotateRight(parent);                // rotate right around parent
+                    node = this.root;                   // update node to root
+                    break;                              // end loop
+                }
+            }
+        }
+
+        if (node != null) {                             // if node is not null
+            node.setColorBlack();                           // set color to black
+        }
+    }
+
+    //////////////////////
+    // HELPER METHODS
+    private void resetParent(Node parent, Node oldChild, Node newChild) {
+        // If the parent is null, we rotated the root. Set root to the new child
+        if (parent == null) {
+            this.root = newChild;
+        } else if (parent.left == oldChild) {
+            parent.left = newChild;
+        } else {
+            parent.right = newChild;
+        }
+
+        // Incase we are reseting for a deleted node and new child is null
+        if (newChild != null) {
+            newChild.parent = parent;
+        }
+    }
+
+    /**
+     * Finds the in-order successor of the given node (node with the smallest key)
+     *
+     * @param node the node for which to find the successor
+     * @return the successor node
+     */
+    private Node successor(Node node) {
+        if (node.right != null) {                       // if the right node exists
+            return findMinimum(node.right);             // find the minimum
+        }
+
+        Node parent = node.parent;                      // set parent as the parent of the node
+        while (parent != null && node == parent.right) {    // traverse through tree until a node is found that's left of its parent
+            node = parent;                                      // move up in the tree
+            parent = parent.parent;                             // move up in the tree
+        }
+
+        return parent;                                  // return the parent
+    }
+
+    /**
+     * Finds the minimum node in the subtree rooted at a given node
+     *
+     * @param node root of the subtree
+     * @return minimum node in the subtree
+     */
+    private Node findMinimum(Node node) {
+        while (node.left != null) {         // while left node is not null
+            node = node.left;               // move to left node
+        }
+        return node;                        // return node
+    }
+
+    //////////////////////
+    // PRINT
     /**
      * Does an in-order traversal to print a RB Tree
      */

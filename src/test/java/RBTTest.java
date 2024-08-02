@@ -114,7 +114,52 @@ public class RBTTest {
         assertEquals(s3, rbt.getRoot().right.data);
         assertFalse(rbt.getNode(s1).isBlack());
     }
+
     @Test
-    public void remove() {
+    public void testRemoveLeafNode() {
+        rbt.add(s1);
+        rbt.add(s2);
+        rbt.add(s3);
+
+        // remove leaf node s3
+        rbt.remove(s3.getId());
+
+        assertNull(rbt.find(s3.getId()));
+        assertNotNull(rbt.find(s1.getId()));
+        assertNotNull(rbt.find(s2.getId()));
+    }
+
+    @Test
+    public void testRemoveNodeWithOneChild() {
+        rbt.add(s1);
+        rbt.add(s2);
+        rbt.add(s3);
+        rbt.add(s4); // s3 has one child
+
+        // remove node s2 with one child
+        rbt.remove(s2.getId());
+
+        assertNull(rbt.find(s2.getId()));
+        assertNotNull(rbt.find(s1.getId()));
+        assertNotNull(rbt.find(s3.getId()));
+        assertNotNull(rbt.find(s4.getId()));
+    }
+
+    @Test
+    public void testRemoveNodeWithTwoChildren() {
+        rbt.add(s1);
+        rbt.add(s2);
+        rbt.add(s3);
+        rbt.add(s4);
+        rbt.add(s5); // s2 has two children
+
+        // remove node s2 with two children
+        rbt.remove(s2.getId());
+
+        assertNull(rbt.find(s2.getId()));
+        assertNotNull(rbt.find(s1.getId()));
+        assertNotNull(rbt.find(s3.getId()));
+        assertNotNull(rbt.find(s4.getId()));
+        assertNotNull(rbt.find(s5.getId()));
     }
 }
