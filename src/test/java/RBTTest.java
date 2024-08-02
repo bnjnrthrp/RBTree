@@ -4,12 +4,15 @@ import org.junit.Assert.*;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
+
 public class RBTTest {
     RBT rbt;
     Student s1;
     Student s2;
     Student s3;
     Student s4;
+    Student s5;
 
     @Before
     public void setUp() throws Exception {
@@ -18,6 +21,12 @@ public class RBTTest {
         s2 = new Student("Bobby", "BlastName");
         s3 = new Student("Charlie", "ClastName");
         s4 = new Student("Danielle", "DlastName");
+        s5 = new Student("Evan", "ElastName");
+    }
+
+    @After
+    public void cleanUp() {
+        Student.resetIdCounter();
     }
 
     @Test
