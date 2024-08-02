@@ -26,7 +26,7 @@ public class RBT implements Tree {
     }
 
     //////////////////////
-    // METHODS
+    // ADD
     /**
      * Adds an object to the existing tree hierarchy. Takes a pre-made object and then creates a
      * Node with will contain the object. Then adds the Node to the tree and puts it in its proper
