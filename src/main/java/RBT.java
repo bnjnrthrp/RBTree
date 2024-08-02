@@ -64,11 +64,10 @@ public class RBT implements Tree {
         } else {
             parent.right = newNode;
         }
-        // Set the parent of the now-inserted node.
-        newNode.parent = parent;
 
-        // Rebalance the tree after inserting a node
-        fixAfterInsert(newNode);
+        newNode.parent = parent;                                    // Set the parent of the now-inserted node.
+        fixAfterInsert(newNode);                                    // Rebalance the tree after inserting a node
+        size++;                                                     // Increase tree size
     }
 
     private void fixAfterInsert(Node node) {
