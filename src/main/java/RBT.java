@@ -85,6 +85,12 @@ public class RBT implements Tree {
 
         // Parent is red, so we determine how to adjust
         Node grandparent = parent.parent;
+
+        // Safeguard: Ensure grandparent is not null before proceeding, as parent is the root node
+        if (grandparent == null) {
+            return;
+        }
+        
         // Get the uncle
         Node uncle;
         if (grandparent.left == parent) {
